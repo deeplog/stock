@@ -1,6 +1,4 @@
 import unittest
-import pandas as pd
-import yfinance as yf
 from util import indicator, data, display
 
 class MyTestCase(unittest.TestCase):
