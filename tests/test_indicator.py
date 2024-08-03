@@ -26,5 +26,10 @@ class MyTestCase(unittest.TestCase):
         df=indicator.golden_death_cross(df,target='Volume', short=5, long=25)
         display.show_golden_death_cross(df,title=f'{self.ticker}_{target}')
 
+    def test_ilmok(self):
+        df = self.df.copy()
+        df = indicator.ichimoku(df)
+        print(df)
+
 if __name__ == '__main__':
     unittest.main()
