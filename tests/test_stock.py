@@ -3,9 +3,6 @@ from util import indicator, data, display, stats
 import yfinance as yf
 
 class MyTestCase(unittest.TestCase):
-
-
-
     def test_real_time_stock(self):
         ticker = yf.Ticker("NVDA")
         todays_data = ticker.history(period='1d')
