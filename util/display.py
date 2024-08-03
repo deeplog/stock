@@ -9,10 +9,20 @@ plt.rcParams['font.family'] = 'NanumGothic'
 plt.rcParams['axes.unicode_minus'] = False
 
 class Plot:
-    def __init__(self):
+    def __init__(self, df, st = None, ed = None):
         self.fig, self.ax = plt.subplots(figsize=(14, 7))
+        self.df = df
+        if st is None:
+            self.st = df.index.min()
+        else:
+            self.st = st
+        if ed is None:
+            self.ed = df.index.max()
+        else:
+            self.ed = ed
+        self.df = df.loc[self.st:self.ed]
 
-    def show(self, title='plot'):
+    def __show(self, title='plot'):
         self.ax.set_title(title)
         self.ax.set_xlabel('Date')
         self.ax.set_ylabel('Price')
@@ -24,27 +34,30 @@ class Plot:
         # 그리드 설정
         self.ax.grid(True, which='major', axis='x', linestyle='--', color='gray', alpha=0.7)
 
-        self.ax.grid(True)
-
         # x축 레이블 회전
         plt.xticks(rotation=45, ha='right')
 
         # 레이아웃 조정
         plt.tight_layout()
-        self.fig.show()
+        plt.show()
 
-    def set_stock_data(self, df):
+    def stock_data(self, title = 'stock data plot'):
+        df = self.df
         for col in df.columns:
             self.ax.plot(df[col], label=col)
+        self.__show(title)
 
-    def set_golden_death_cross(self, df):
+    def golden_death_cross(self, title='golden death plot'):
+        df = self.df
         golden = df[df['Golden']]
         death = df[df['Death']]
         self.ax.plot(df['Close'], color='k',label='Close')
         self.ax.plot(golden['Close'], '^', markersize=10, color='r', label='Golden Cross')
         self.ax.plot(death['Close'], 'v', markersize=10, color='b', label='Death Cross')
+        self.__show(title)
 
-    def set_vol_golden_death_cross(self,df):
+    def vol_golden_death_cross(self, title = 'vol golden death plot'):
+        df = self.df
         golden = df[df['Golden']]
         death = df[df['Death']]
         self.ax.plot(df['Close'], color='k',label='Close')
@@ -55,30 +68,33 @@ class Plot:
         ax2 = self.ax.twinx()
         ax2.plot(df['Volume'], color='blue',label='Volume')
         ax2.legend(loc='upper right')
+        self.__show(title)
 
 
-    def set_ichimoku(self, df, title="일목균형표"):
-        # plt.plot(df.index, df['Close'],linewidth=1, linestyle='-.', label='종가', color='black')
-        self.ax.plot(df.index, df['conversion_line'], label='전환선', color='gray')
-        self.ax.plot(df.index, df['base_line'], label='기준선', color='purple')
-        self.ax.plot(df.index, df['leading_span_a'], label='선행스팬1', color='red')
-        self.ax.plot(df.index, df['leading_span_b'], label='선행스팬2', color='blue')
-        self.ax.plot(df.index, df['lagging_span'], label='후행스팬', color='orange')
+    def ichimoku(self, title="일목균형표"):
+        self.ax.plot(self.df.index, self.df['Close'],linewidth=1, linestyle='-.', label='종가', color='black')
+        #df = self.df
+        self.ax.plot(self.df.index, self.df['conversion_line'], label='전환선', color='gray')
+        self.ax.plot(self.df.index, self.df['base_line'], label='기준선', color='purple')
+        self.ax.plot(self.df.index, self.df['leading_span_a'], label='선행스팬1', color='red')
+        self.ax.plot(self.df.index, self.df['leading_span_b'], label='선행스팬2', color='blue')
+        self.ax.plot(self.df.index, self.df['lagging_span'], label='후행스팬', color='orange')
 
-        self.ax.fill_between(df.index, df['leading_span_a'], df['leading_span_b'],
-                         where=df['leading_span_a'] >= df['leading_span_b'], facecolor='red', alpha=0.5)
-        self.ax.fill_between(df.index, df['leading_span_a'], df['leading_span_b'],
-                         where=df['leading_span_a'] < df['leading_span_b'], facecolor='blue', alpha=0.5)
+        self.ax.fill_between(self.df.index, self.df['leading_span_a'], self.df['leading_span_b'],
+                         where=self.df['leading_span_a'] >= self.df['leading_span_b'], facecolor='red', alpha=0.5)
+        self.ax.fill_between(self.df.index, self.df['leading_span_a'], self.df['leading_span_b'],
+                         where=self.df['leading_span_a'] < self.df['leading_span_b'], facecolor='blue', alpha=0.5)
+        self.__show(title)
 
-    def plot_counterclock(self,df, title="역시계곡선"):
+    def counterclock(self,title="역시계곡선"):
         '''
         역시계 곡선
         :param df:
         :return:
         '''
-        days = df.index
-        price = df['Close']
-        volume = df['Volume']
+        days = self.df.index
+        price = self.df['Price']
+        volume = self.df['Volume']
 
         points = np.array([volume, price]).T.reshape(-1, 1, 2)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
