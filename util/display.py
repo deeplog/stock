@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-def show_stock_data(df, colnames, title='stock data'):
+def show_stock_data(df, title='stock data'):
     plt.figure(figsize=(14, 7))
-    for col in colnames:
+    for col in df.columns:
         plt.plot(df[col], label=col)
     plt.title(title)
     plt.xlabel('Date')

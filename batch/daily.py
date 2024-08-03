@@ -9,7 +9,8 @@ class DailyBatch:
         df = data.get_my_stocks()
         summary_df = stats.summary(df)
         today = datetime.today().strftime("%Y%m%d")
-        summary_df.to_csv(f'../data/{today}_summary.csv')
+        summary_df.columns = ['종목','매수','매도','보유','매입가','현재가','실현','잠재']
+        summary_df.to_csv(f'../data/{today}_summary.csv',encoding='cp949')
 
 
 if __name__=="__main__":
