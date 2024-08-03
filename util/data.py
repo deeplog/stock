@@ -1,6 +1,8 @@
 import yfinance as yf
 import pandas as pd
-import config
+from util import config
+
+
 def get_year_data(ticker):
     # Define the stock symbol and period
     period = "1y"
