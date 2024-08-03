@@ -45,5 +45,12 @@ class MyTestCase(unittest.TestCase):
         plot.show('일목요연표')
         print(df)
 
+    def test_counterclock(self):
+        df = self.df.copy()
+        plot = display.Plot()
+        plot.plot_counterclock(df)
+        print(df)
+
+
 if __name__ == '__main__':
     unittest.main()
