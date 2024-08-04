@@ -1,6 +1,7 @@
 import unittest
 from stock.util import data, display
 from stock.pattern import newhigh, box, pullback
+from stock.chart import basic
 
 
 class BoxTestCase(unittest.TestCase):
@@ -56,6 +57,12 @@ class PullBackTestCase(unittest.TestCase):
     def test_pullback(self):
         df = self.df.copy()
         df = pullback.pullback(df)
+        self.assertTrue('complete')
+
+    def test_plot_pullback(self):
+        df = self.df.copy()
+        df = pullback.pullback(df)
+        basic.pullback_chart(df)
         self.assertTrue('complete')
 
 
