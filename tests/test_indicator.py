@@ -20,8 +20,7 @@ class MyTestCase(unittest.TestCase):
         df = self.df.copy()
         df=indicator.golden_death_cross(df,target='Close', short=5, long=25)
         plot = display.Plot(df, '2024-07-01', '2024-08-05')
-        plot.golden_death_cross()
-        plot.fig.savefig('test_output/close_golden_death.png')
+        plot.golden_death_cross('test_output/close_golden_death.png')
 
     def test_vol_golden_death(self):
         df = self.df.copy()
