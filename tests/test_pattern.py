@@ -1,8 +1,8 @@
 import unittest
 from util import data, display
-from pattern import box
+from pattern import box, newhigh
 
-class MyTestCase(unittest.TestCase):
+class BoxTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.ticker = "005930.KS"  # 삼성전자 주식 코드
         self.start_date = "2024-01-01"
@@ -26,6 +26,25 @@ class MyTestCase(unittest.TestCase):
         df = box.identify_breakout(df)
         plot = display.Plot(df, '2024-03-01', '2024-04-01')
         plot.box_pattern(title,save_path)
+        self.assertTrue('complete')
+
+class NewHighTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.ticker = "NVDA"  # 삼성전자 주식 코드
+        self.start_date = "2023-01-01"
+        self.end_date = "2024-08-01"
+        self.df = data.get_stock_data(self.ticker,self.start_date,self.end_date)
+    def test_newhigh(self):
+        df = self.df.copy()
+        df = newhigh.generate_buy_signals(df)
+        self.assertTrue('complete')
+
+    def test_plot_newhigh(self):
+        df = self.df.copy()
+        df = newhigh.generate_buy_signals(df)
+
+
+
         self.assertTrue('complete')
 
 
