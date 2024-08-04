@@ -1,5 +1,6 @@
 import unittest
-from util import display, data, indicator
+from stock.util import data, display, indicator
+
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
@@ -10,7 +11,7 @@ class MyTestCase(unittest.TestCase):
         df = self.df.copy()
         window = 5
         ma_col = f'MA{self.col}{window}'
-        df = indicator.ma(df,window)
+        df = indicator.ma(df, window)
         df = df[['Close', 'MAClose5']]
         plot = display.Plot(df, '2024-07-01', '2024-08-05')
         plot.stock_data('moving average')
@@ -18,14 +19,14 @@ class MyTestCase(unittest.TestCase):
 
     def test_close_golden_death(self):
         df = self.df.copy()
-        df=indicator.golden_death_cross(df,target='Close', short=5, long=25)
+        df= indicator.golden_death_cross(df, target='Close', short=5, long=25)
         plot = display.Plot(df, '2024-07-01', '2024-08-05')
         plot.golden_death_cross('test_output/close_golden_death.png')
 
     def test_vol_golden_death(self):
         df = self.df.copy()
         target = 'Volume'
-        df=indicator.golden_death_cross(df,target='Volume', short=5, long=25)
+        df= indicator.golden_death_cross(df, target='Volume', short=5, long=25)
         plot = display.Plot(df, '2024-07-01', '2024-08-05')
         plot.vol_golden_death_cross('volume golden cross')
         plot.fig.savefig('test_output/vol_golden_death.png')

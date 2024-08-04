@@ -1,6 +1,6 @@
 import yfinance as yf
 import pandas as pd
-from util import config
+from stock.util import config
 
 
 def get_year_data(ticker):

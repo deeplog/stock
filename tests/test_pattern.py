@@ -1,13 +1,14 @@
 import unittest
-from util import data, display
-from pattern import box, newhigh
+from stock.util import data, display
+from stock.pattern import newhigh, box, pullback
+
 
 class BoxTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.ticker = "005930.KS"  # 삼성전자 주식 코드
         self.start_date = "2024-01-01"
         self.end_date = "2024-08-01"
-        self.df = data.get_stock_data(self.ticker,self.start_date,self.end_date)
+        self.df = data.get_stock_data(self.ticker, self.start_date, self.end_date)
     def test_box(self):
         df = self.df.copy()
         df = box.identify_boxed_range(df)
@@ -33,7 +34,7 @@ class NewHighTestCase(unittest.TestCase):
         self.ticker = "NVDA"  # 삼성전자 주식 코드
         self.start_date = "2023-01-01"
         self.end_date = "2024-08-01"
-        self.df = data.get_stock_data(self.ticker,self.start_date,self.end_date)
+        self.df = data.get_stock_data(self.ticker, self.start_date, self.end_date)
     def test_newhigh(self):
         df = self.df.copy()
         df = newhigh.generate_buy_signals(df)
@@ -43,8 +44,18 @@ class NewHighTestCase(unittest.TestCase):
         df = self.df.copy()
         df = newhigh.generate_buy_signals(df)
 
+        self.assertTrue('complete')
 
+class PullBackTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.ticker = "NVDA"  # 삼성전자 주식 코드
+        self.start_date = "2023-01-01"
+        self.end_date = "2024-08-01"
+        self.df = data.get_stock_data(self.ticker, self.start_date, self.end_date)
 
+    def test_pullback(self):
+        df = self.df.copy()
+        df = pullback.pullback(df)
         self.assertTrue('complete')
 
 

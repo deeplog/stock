@@ -1,5 +1,5 @@
 import unittest
-from util import indicator, data, display, stats
+from stock.util import data, stats
 import yfinance as yf
 
 class MyTestCase(unittest.TestCase):

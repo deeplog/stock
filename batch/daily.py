@@ -1,4 +1,4 @@
-from util import data, stats
+from stock.util import data, stats
 from datetime import datetime
 
 class DailyBatch:
