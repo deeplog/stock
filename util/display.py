@@ -40,6 +40,29 @@ class Plot:
         # 레이아웃 조정
         plt.tight_layout()
         plt.show()
+    def __fig_save(self, save_path=None):
+        if save_path is not None:
+            self.fig.savefig(save_path)
+
+    def box_pattern(self, title = 'box pattern', save_path=None):
+        '''
+        pattern box에 의해서 생성된 데이터를 가시화
+        :param title:
+        :return:
+        '''
+        df = self.df
+        boxed_range = df[df['is_boxed']]
+        self.ax.plot(df.index, df['Close'], label='주가')
+        self.ax.scatter(boxed_range.index, boxed_range['Close'], color='orange', label='박스권', alpha=0.5)
+        breakout_points = df[df['breakout']]
+        self.ax.scatter(breakout_points.index, breakout_points['Close'], color='red', label='박스권 돌파', marker='^')
+
+        buy_signal = df[df['buy_signal'] == True]
+        if not buy_signal.empty:
+            self.ax.scatter(buy_signal.index, buy_signal['Close'], color='blue', s=200, label='매수 시그널', marker='*')
+        self.__show(title)
+        self.__fig_save(save_path)
+
 
     def stock_data(self, title = 'stock data plot'):
         df = self.df
@@ -47,7 +70,7 @@ class Plot:
             self.ax.plot(df[col], label=col)
         self.__show(title)
 
-    def golden_death_cross(self, title='golden death plot'):
+    def golden_death_cross(self, title='golden death plot', save_path=None):
         df = self.df
         golden = df[df['Golden']]
         death = df[df['Death']]
@@ -55,6 +78,7 @@ class Plot:
         self.ax.plot(golden['Close'], '^', markersize=10, color='r', label='Golden Cross')
         self.ax.plot(death['Close'], 'v', markersize=10, color='b', label='Death Cross')
         self.__show(title)
+        self.__save_path(save_path)
 
     def vol_golden_death_cross(self, title = 'vol golden death plot'):
         df = self.df
