@@ -11,6 +11,18 @@ def get_year_data(ticker):
     stock_data = yf.download(ticker, period=period)
     return stock_data
 
+def get_stock_data(ticker, start_date, end_date):
+    """
+    야후 파이낸스에서 주식 데이터를 가져오는 함수
+    :param ticker: 주식 티커 심볼
+    :param start_date: 시작 날짜
+    :param end_date: 종료 날짜
+    :return: 주식 데이터 DataFrame
+    """
+    stock = yf.Ticker(ticker)
+    df = stock.history(start=start_date, end=end_date)
+    return df
+
 def process_transactions(group):
     buy_queue = []
     total_shares = 0
