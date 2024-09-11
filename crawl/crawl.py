@@ -81,8 +81,7 @@ def update_stock(ticker, name, market):
         if os.path.exists(file_path):
             last_row = con.execute(f"SELECT * FROM parquet_scan('{file_path}') ORDER BY date DESC LIMIT 1").fetchdf()
             if not last_row.empty:
-                last_date = last_row['Date'][0]
-                start_date = (last_date + timedelta(days=1)).strftime("%Y-%m-%d")
+                start_date = last_row['Date'][0].strftime("%Y-%m-%d")
             else:
                 start_date = "2018-01-01"
         else:
@@ -90,7 +89,7 @@ def update_stock(ticker, name, market):
 
         end_date = datetime.now().strftime("%Y-%m-%d")
 
-        if start_date < end_date:
+        if start_date != end_date:
             new_data = get_stock(ticker, start_date, end_date, market)
             if new_data is not None and not new_data.empty:
                 new_data = optimize_dtypes(new_data)
@@ -133,10 +132,11 @@ def update_stocks_parallel(tickers, market, chunk_size=50, max_workers=10):
 def get_market(market):
     market = market.upper()
     tickers = get_stock_list(market)
-    print(f"Starting update for {len(tickers)} stocks")
+    print(f"Starting {market} update for {len(tickers)} stocks")
     update_stocks_parallel(tickers, market)
-    print("All updates completed")
+    print(f"All {market} updates completed")
 
 if __name__=="__main__":
-    for market in ['kospi','kosdaq','nasdaq']:
+    markets = ['kospi','kosdaq','nasdaq']
+    for market in markets:
         get_market(market)
